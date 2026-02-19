@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :update, :destroy]
+  before_action :set_task, only: %i[show update destroy]
+  before_action :authorize_task_owner!, only: %i[destroy]
 
   def index
-    tasks = current_user.tasks
+    tasks = current_user.accessible_tasks
     render json: tasks
   end
 
@@ -35,12 +38,18 @@ class TasksController < ApplicationController
   private
 
   def set_task
-    @task = current_user.tasks.find(params[:id])
+    @task = current_user.accessible_tasks.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Not Found' }, status: :not_found
+    render json: { error: "Not Found" }, status: :not_found
+  end
+
+  def authorize_task_owner!
+    return if @task.user_id == current_user.id
+
+    render json: { error: "Only the task owner can delete the task" }, status: :forbidden
   end
 
   def task_params
-    params.permit(:title, :description, :completed)
+    params.permit(:title, :description, :completed, :priority)
   end
 end

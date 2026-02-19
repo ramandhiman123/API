@@ -3,4 +3,3 @@ class AddIndexToTasksCompleted < ActiveRecord::Migration[8.1]
     add_index :tasks, :completed
   end
 end
-

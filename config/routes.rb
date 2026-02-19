@@ -12,8 +12,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  post '/register', to: 'authentication#register'
-  post '/login', to: 'authentication#login'
+  post "/register", to: "authentication#register"
+  post "/login", to: "authentication#login"
 
-  resources :tasks
+  resources :tasks do
+    resources :comments, only: %i[index show create update destroy]
+    resources :task_assignments, only: %i[index create destroy], param: :id
+  end
 end

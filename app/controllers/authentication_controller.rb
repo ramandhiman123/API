@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class AuthenticationController < ApplicationController
-  skip_before_action :authenticate_request, only: [:register, :login]
+  skip_before_action :authenticate_request, only: %i[register login]
 
   def register
     user = User.new(user_params)
@@ -18,7 +20,7 @@ class AuthenticationController < ApplicationController
       token = JsonWebToken.encode(user_id: user.id)
       render json: { token: token }, status: :ok
     else
-      render json: { error: 'Invalid credentials' }, status: :unauthorized
+      render json: { error: "Invalid credentials" }, status: :unauthorized
     end
   end
 
@@ -28,4 +30,3 @@ class AuthenticationController < ApplicationController
     params.permit(:email, :password, :password_confirmation)
   end
 end
-

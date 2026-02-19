@@ -3,4 +3,3 @@ class AddDefaultToTasksCompleted < ActiveRecord::Migration[8.1]
     change_column_default :tasks, :completed, false
   end
 end
-

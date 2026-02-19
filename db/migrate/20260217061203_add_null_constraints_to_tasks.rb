@@ -4,4 +4,3 @@ class AddNullConstraintsToTasks < ActiveRecord::Migration[8.1]
     change_column_null :tasks, :completed, false
   end
 end
-
